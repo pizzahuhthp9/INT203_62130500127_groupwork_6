@@ -1,36 +1,160 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Basic Vue Js - HelloWorld App</title>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Basic Vue Js - HelloWorld App</title>
+    <!-- https://google.github.io/material-design-icons/#icon-font-for-the-web -->
+    <!-- Using via Google Web Fonts -->
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
 
-  <!-- https://google.github.io/material-design-icons/#icon-font-for-the-web -->
-  <!-- Using via Google Web Fonts -->
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    <!-- https://tailwindcss.com/docs/installation -->
+    <!-- Using Tailwind via CDN -->
 
-  <!-- https://tailwindcss.com/docs/installation -->
-  <!-- Using Tailwind via CDN -->
-  <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet" />
+    <!-- <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet" /> -->
 
-  <!-- https://v3.vuejs.org/guide/installation.html#release-notes -->
-  <!-- Vue CDN -->
-  <script src="https://unpkg.com/vue@next"></script>
+    <!-- https://v3.vuejs.org/guide/installation.html#release-notes -->
+    <!-- Vue CDN -->
+    <script src="https://unpkg.com/vue@next"></script>
 
-</head>
+    <!-- validaion -->
+    <script src="//cdnjs.cloudflare.com/ajax/libs/validate.js/0.13.1/validate.min.js"></script>
 
-<body>
-  <div id="app" class="h-screen w-full bg-gray-200 flex items-start justify-start">
-    <img src="./images/1.jpg" class="w-1/3 h-full">
-    <div class="w-full flex items-center justify-end">
-      <i class="material-icons">face</i>
-      <p class="font-semibold text-xl tracking-wider uppercase px-3"> {{ msg }}</p>
+    <!-- bootstrap profile -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-alpha1/dist/js/bootstrap.bundle.min.js"></script> -->
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+      crossorigin="anonymous"
+    />
+  </head>
+
+  <body>
+    <div
+      id="app"
+      class="h-screen w-full bg-gray-200 flex items-start justify-start mb-3"
+    >
+      <div class="container mt-5 d-flex justify-content-center">
+        <div class="card p-3">
+          <div class="d-flex align-items-center">
+            <div class="image">
+              <img :src="picSrc" class="rounded obj-fits" height="155" />
+            </div>
+            <div class="ml-3 w-100">
+              <h4 class="mb-0 mt-0">{{ fname }} {{ lname }}</h4>
+              <span>{{ position }}</span>
+              <div
+                class="p-2 mt-2 bg-light d-flex justify-content-between rounded text-white stats"
+              >
+                <div class="d-flex flex-column">
+                  <span class="text-black-50"><small>Repository</small></span>
+                  <span class="text-body">{{ historyWork.repository }}</span>
+                </div>
+                <div class="d-flex flex-column">
+                  <span class="text-black-50"><small>Followers</small></span>
+                  <span class="text-body">{{ historyWork.follower }}</span>
+                </div>
+                <div class="d-flex flex-column">
+                  <span class="text-black-50"><small>Rating</small></span>
+                  <span class="text-body">{{ historyWork.rating }}</span>
+                </div>
+              </div>
+              <div class="button mt-2 d-flex flex-row align-items-center">
+                <button class="btn btn-sm btn-outline-primary w-100">
+                  Chat
+                </button>
+                <button class="btn btn-sm btn-primary w-100 ml-2">
+                  Follow
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="text-light bg-danger mx-5 py-2 px-5" v-if="form.errors">
+        <h3>ERROR</h3>
+          <div v-for="(error, index) in form.errors" :key="index">
+            {{error}}
+          </div>
+      </div>
+      <form class="mx-5 px-5" @submit.prevent="checkForm">
+        <div class="form-group">
+          <label for="firstName">Firstname</label>
+          <input
+            type="text"
+            class="form-control"
+            id="firstName"
+            placeholder="Enter Firstname"
+            v-model.lazy="form.fname"
+          />
+        </div>
+        <div class="form-group">
+          <label for="Lastname">Lastname</label>
+          <input
+            type="text"
+            class="form-control"
+            id="Lastname"
+            placeholder="Enter Lastname"
+            v-model.lazy="form.lname"
+          />
+        </div>
+        <div class="form-group">
+          <label for="email">Email address</label>
+          <input
+            type="text"
+            class="form-control"
+            id="email"
+            aria-describedby="emailHelp"
+            placeholder="Enter email"
+            v-model.lazy="form.email"
+          />
+        </div>
+        <div class="form-group">
+          <label for="tel">Telephone No</label>
+          <input
+            type="text"
+            class="form-control"
+            id="tel"
+            placeholder="Telephone number"
+            v-model.lazy="form.tel"
+          />
+        </div>
+        Gender
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="gender" id="male" value="male" v-model.lazy="form.gender">
+          <label class="form-check-label" for="male">
+            Male
+          </label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="gender" id="female" value="female" v-model.lazy="form.gender">
+          <label class="form-check-label" for="female">
+            Female
+          </label>
+        </div>
+        <div class="form-group">
+          <label for="age">Age</label>
+          <input
+            type="number"
+            class="form-control"
+            id="age"
+            placeholder="Enter Age"
+            v-model.lazy="form.age"
+          />
+        </div>
+
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </form>
     </div>
-  </div>
 
-  <!-- my main.js -->
-  <script src="./main.js"></script>
-</body>
+    <!-- my main.js -->
+    <script src="//cdnjs.cloudflare.com/ajax/libs/validate.js/0.13.1/validate.min.js"></script>
 
+    <script src="./main.js"></script>
+  </body>
 </html>
